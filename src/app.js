@@ -13,11 +13,11 @@ const options = {
 };
 
 function findUniqueCountry(data) {
-  if (data.lenght > 10) {
+  if (data.length > 10) {
     PNotify.alert(
       'Too many matches found. Please enter a more specific query!',
     );
-  } else if (data.lenght >= 2 && data.lenght <= 10) {
+  } else if (data.length >= 2 && data.length <= 10) {
     const htmlMarkup = data.map(e => template(e.name)).join('\n');
     refs.countryList.insertAdjacentHTML('afterbegin', htmlMarkup);
   };

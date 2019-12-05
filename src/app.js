@@ -1,32 +1,37 @@
-import menu from './components/menu';
-import database from './database/menu.json';
-import refs from './utils/refs';
+import { fetchCountries } from './api/fetchCountries';
+import { refs } from './utils/refs';
+import template from './templates/country-items.hbs';
+import PNotify from '../node_modules/pnotify/dist/es/PNotify';
 
-menu(database, refs.menu);
-
-const Theme = {
-  LIGHT: 'light-theme',
-  DARK: 'dark-theme',
+const baseUrl = 'https://restcountries.eu/rest/v2/name/';
+const options = {
+  method: 'GET',
+  headers: {
+    'Content-Type': 'application/json',
+    Accept: 'application/json',
+  },
 };
 
-const initTheme = localStorage.getItem('theme') || Theme.LIGHT;
-if (initTheme === Theme.LIGHT) {
-  refs.switch.checked = false;
-} else {
-  refs.switch.checked = true;
-}
-refs.body.classList = initTheme;
+function findUniqueCountry(data) {
+  if (data.lenght > 10) {
+    PNotify.alert(
+      'Too many matches found. Please enter a more specific query!',
+    );
+  } else if (data.lenght >= 2 && data.lenght <= 10) {
+    const htmlMarkup = data.map(e => template(e.name)).join('\n');
+    refs.countryList.insertAdjacentHTML('afterbegin', htmlMarkup);
+  };
+  // else if (data.lenght = 1) {
 
-function setTheme(currentTheme) {
-  refs.body.classList = currentTheme;
-  localStorage.setItem('theme', currentTheme);
+  // }
+} 
+
+function resultSearchCountry({ target }) {
+  event.preventDefault();
+
+  const inputValue = target.value;
+
+  fetchCountries(baseUrl + inputValue, options).then(findUniqueCountry);
 }
 
-function handleChangeTheme() {
-  if (refs.switch.checked === true) {
-    setTheme(Theme.DARK);
-  } else {
-    setTheme(Theme.LIGHT);
-  }
-}
-refs.switch.addEventListener('change', handleChangeTheme);
+refs.getCountry.addEventListener('input', _.debounce(resultSearchCountry, 500));

@@ -1,7 +1,6 @@
 const refs = {
-    menu: document.querySelector('.js-menu'),
-    switch: document.querySelector('.js-switch-input'),
-    body: document.body,
+    getCountry: document.querySelector('#search_country'),
+    countryList: document.querySelector('#country_list'),
 }
 
-export default refs;
+export {refs};

@@ -3,4 +3,13 @@ const fetchCountries = url =>
     .then(data => data.json())
     .catch(err => console.log(err));
 
-export {fetchCountries};
+const baseUrl = 'https://restcountries.eu/rest/v2/name/';
+const options = {
+  method: 'GET',
+  headers: {
+    'Content-Type': 'application/json',
+    Accept: 'application/json',
+  },
+};
+
+export { fetchCountries, baseUrl, options };

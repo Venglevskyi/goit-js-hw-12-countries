@@ -1,37 +1,38 @@
-import { fetchCountries } from './api/fetchCountries';
-import { refs } from './utils/refs';
-import template from './templates/country-items.hbs';
-import PNotify from '../node_modules/pnotify/dist/es/PNotify';
+import { warning } from './utils/pnotify';
 
-const baseUrl = 'https://restcountries.eu/rest/v2/name/';
-const options = {
-  method: 'GET',
-  headers: {
-    'Content-Type': 'application/json',
-    Accept: 'application/json',
-  },
-};
+import { fetchCountries, baseUrl, options } from './api/fetchCountries';
+import { refs } from './utils/refs';
+import debounce from 'lodash.debounce';
+import template from './templates/country-items.hbs';
 
 function findUniqueCountry(data) {
   if (data.length > 10) {
-    PNotify.alert(
-      'Too many matches found. Please enter a more specific query!',
-    );
+    warning();
   } else if (data.length >= 2 && data.length <= 10) {
-    const htmlMarkup = data.map(e => template(e.name)).join('\n');
+    const htmlMarkup = data
+      .map(e => `<li class="country-item country-list">${e.name}</li>`)
+      .join('\n');
     refs.countryList.insertAdjacentHTML('afterbegin', htmlMarkup);
-  };
-  // else if (data.lenght = 1) {
+  } else if ((data.length = 1)) {
+    const [country] = data;
+    refs.searchInput.insertAdjacentHTML('afterend', template(country));
+    refs.countryList.innerHTML = '';
+  }
+  return data;
+}
 
-  // }
-} 
-
-function resultSearchCountry({ target }) {
+function resultSearchCountry(event) {
   event.preventDefault();
 
-  const inputValue = target.value;
+  const inputValue = event.target.value;
+
+  if (inputValue === '') {
+    refs.deleteCountry.innerHTML = '';
+    return inputValue;
+  }
+  
 
   fetchCountries(baseUrl + inputValue, options).then(findUniqueCountry);
 }
 
-refs.getCountry.addEventListener('input', _.debounce(resultSearchCountry, 500));
+refs.searchInput.addEventListener('input', debounce(resultSearchCountry, 500));

@@ -1,6 +1,7 @@
 const refs = {
-    getCountry: document.querySelector('#search_country'),
+    searchInput: document.querySelector('#search_country'),
     countryList: document.querySelector('#country_list'),
+    deleteCountry: document.querySelector('.country'),
 }
 
 export {refs};

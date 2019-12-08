@@ -9,14 +9,17 @@ function findUniqueCountry(data) {
   if (data.length > 10) {
     warning();
     refs.countryList.innerHTML = '';
+    refs.countryItem.innerHTML = '';
   } else if (data.length >= 2 && data.length <= 10) {
     const htmlMarkup = data
       .map(e => `<li class="country-item country-list">${e.name}</li>`)
       .join('\n');
     refs.countryList.innerHTML = htmlMarkup;
+    refs.countryItem.innerHTML = '';
   } else if (data.length === 1) {
     const [country] = data;
-    refs.countryList.innerHTML = template(country);
+    refs.countryItem.innerHTML = template(country);
+    refs.countryList.innerHTML = '';
   }
   return data;
 }

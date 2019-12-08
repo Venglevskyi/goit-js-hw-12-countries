@@ -10,6 +10,6 @@ const options = {
 const fetchCountries = url =>
   fetch(url)
     .then(data => data.json())
-    .catch(err => console.log(err));
+    .catch(err => console.warn(err));
 
 export { fetchCountries, baseUrl, options };

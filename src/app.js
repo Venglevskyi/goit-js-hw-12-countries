@@ -20,14 +20,17 @@ function findUniqueCountry(data) {
     const [country] = data;
     refs.countryItem.innerHTML = template(country);
     refs.countryList.innerHTML = '';
-  }
+  } 
   return data;
 }
 
 function resultSearchCountry(event) {
   event.preventDefault();
 
-  const inputValue = event.target.value.toLowerCase();
+  let inputValue = 'name/' + event.target.value.toLowerCase();
+  if (inputValue === 'name/') {
+    inputValue = '';
+  }
 
   fetchCountries(baseUrl + inputValue, options).then(findUniqueCountry);
 }

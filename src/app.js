@@ -17,7 +17,7 @@ function findUniqueCountry(data) {
   } else if (data.length === 1) {
     const [country] = data;
     refs.countryList.innerHTML = template(country);
-  } 
+  }
   return data;
 }
 

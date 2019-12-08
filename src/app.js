@@ -8,29 +8,23 @@ import template from './templates/country-items.hbs';
 function findUniqueCountry(data) {
   if (data.length > 10) {
     warning();
+    refs.countryList.innerHTML = '';
   } else if (data.length >= 2 && data.length <= 10) {
     const htmlMarkup = data
       .map(e => `<li class="country-item country-list">${e.name}</li>`)
       .join('\n');
-    refs.countryList.insertAdjacentHTML('afterbegin', htmlMarkup);
-  } else if ((data.length = 1)) {
+    refs.countryList.innerHTML = htmlMarkup;
+  } else if (data.length === 1) {
     const [country] = data;
-    refs.searchInput.insertAdjacentHTML('afterend', template(country));
-    refs.countryList.innerHTML = '';
-  }
+    refs.countryList.innerHTML = template(country);
+  } 
   return data;
 }
 
 function resultSearchCountry(event) {
   event.preventDefault();
 
-  const inputValue = event.target.value;
-
-  if (inputValue === '') {
-    refs.deleteCountry.innerHTML = '';
-    return inputValue;
-  }
-  
+  const inputValue = event.target.value.toLowerCase();
 
   fetchCountries(baseUrl + inputValue, options).then(findUniqueCountry);
 }
